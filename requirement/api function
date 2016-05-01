@@ -1,0 +1,33 @@
+1- getAllActivities
+2- getAllActivitiesByMonth 
+8-getActivitiesbyownerandmonth
+
+9-getActivitiesbyjoinerandmonth  
+
+12-listCommentsbyActivity
+
+15- listphotosbyactivity
+
+//////////////////////////////
+
+
+10-addComment
+11-removeComment 
+
+13-addPhoto   		?blob/base64 write
+14-removePhotos
+////////////////////////////////
+
+3-  AddActivity
+4-  Remove Activity
+5-  EditActivity
+
+6-  JoinActivity
+7-	UnjoinActivity
+ 
+
+16- sign up user   
+17- REMOVE USER
+
+18 - add activityType
+19- remove activityType

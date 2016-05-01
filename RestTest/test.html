@@ -1,0 +1,115 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>jQuery AJAX - jsFiddle demo by clickthelink</title>
+  
+  <script type='text/javascript' src='http://code.jquery.com/jquery-1.8.3.js'></script>
+   
+      <script type='text/javascript' src="http://fonts.googlepis.com/css?famaily=Open+Sans:400,700"></script>
+    
+  
+  <style type='text/css'>
+    body{
+    font-family: 'Open Sans', 'Helvetica Neue', 'Arial', sans-serif;
+    font-size: 13px;       
+}
+
+form span{  
+    display: block;
+    margin: 10px;
+}
+
+label{
+    display: inline-block;
+    width: 100px;     
+}
+
+input[type="text"]{
+    border: 1px soild #ccc;
+    width: 200px;
+    padding: 5px;
+}
+
+input[type="submit"]{
+     padding: 5px 15px;       
+}
+
+span#result{
+    padding: 5px;
+    background: #ff9;        
+}
+
+img#loadingimg{
+    display: none;                   
+}
+  </style>
+  
+
+
+<script type='text/javascript'>//<![CDATA[ 
+
+$(document).ready(function(e) {
+    
+   $("form[ajax=true]").submit(function(e) {
+        
+        e.preventDefault();
+        var form_data =  {"user_id":"testbob","user_password":"abc123"};
+         form_data =  JSON.stringify(form_data );
+         var form_url = "http://seanloh.com/NDOH/v1/delete";
+           
+        var form_method = "DELETE";
+        
+            var  head_data =  {"app_id":"mkApiApp","app_ver":"v1","device_ver":"4.4","device_type":"android","token":"SECRETKEYtoken123abcTODOhere"};
+         head_data =  JSON.stringify(head_data );  
+       
+        $.ajax({
+             beforeSend: function(xhrObj){
+                 xhrObj.setRequestHeader("Content-Type","Content-Type:application/plain;charset=UTF-8");
+                 xhrObj.setRequestHeader("Accept","Content-Type:application/plain;charset=UTF-8"); 
+            },
+            url: form_url, 
+            type: form_method,      
+            //data:  form_data,    dataType: "json",   
+            cache: false,
+            success: function(returnhtml){                          
+                $("#result").html(returnhtml); 
+                $("#loadingimg").hide();                    
+            }           
+        });    
+        
+    });
+   
+    
+     
+});
+//]]>  
+
+</script>
+
+
+</head>
+<body>
+  <form method="post" action="http://stag.maukerja.my/mkapi/v1/put/login/testbob" ajax="true">
+    
+    <span id="result"><a href="http://wp.me/p2O9K2-b">jQuery + AJAX form submit script.</a></span>
+   
+    <span>        
+        <label>Message: </label>
+        <input type="text" name="html" placeholder="Howdy..." />
+    </span>
+    
+    <span>
+        <label><img id="loadingimg" src="http://dev.cloudcell.co.uk/bin/loading.gif"/>   </label>
+        <input type="submit" value="Submit" />      
+    </span>
+    
+</form>
+  
+</body>
+
+
+</html>
+

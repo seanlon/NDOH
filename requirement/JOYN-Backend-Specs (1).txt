@@ -1,0 +1,32 @@
+//Activity Table
+
+1- Id - > Integar (primary key ) auto increment
+2- Name -> String
+3- Description -> String
+4- isPrivate -> Boolean 
+5- joinersLimit -> Integar
+6- ActivityType -> Integar
+7- From -> Long (Milliseconds)
+8- To -> Long (Milliseconds)
+9- Address -> String 
+10- Lat
+12- Lng
+
+//Speaker Table
+1- SpeakerName -> String
+2- SpeakerId-> Integar (primary key ) auto increment
+
+//Speaking Table(Relation Table)
+1-SpeakingId ->Integar (primary key ) auto increment
+2-ActivityId ->Foreign Key refrence Activity Table
+3-SpeakerId -> Foreign Key refrence Speaker Table
+
+//Join Table (Relation Table)
+1- Id -> Integar (primary key ) auto increment
+2- ActivityId ->Integar ->  Foreign Key refrence Activity Table
+3- JoinerId ->  integar ->  Foreign Key refrence Joiner Table
+
+//Joiner Table
+1- Id -> Integar (primary key ) auto increment
+2- JoinerFbUsername ->  String
+3- JoinerImageUrl -> String

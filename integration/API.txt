@@ -1,0 +1,368 @@
+1- getAllActivities
+
+----------REQUEST--------------
+----------/header/--------------
+Request URL:http://seanloh.com/NDOH/v1/activity
+Request Method:POST
+Status Code:200 OK
+Remote Address:202.75.56.136:80 
+
+Content-Type:application/json; charset=UTF-8
+----------/body/--------------
+{}
+----------RESPONSE--------------
+[{"Id":"1","Name":"birthday party","Description":"I would like to organize a birthday party for my friend","isPrivate":"1","joinersLimit":"20","FromPeriod":"2016-04-09 03:10:00","ToPeriod":"2016-04-10 04:08:00","activityId":"1","activityDesc":"Party","Address":"Arvato Systems , Menara IMC","LatLoc":null,"LngLoc":null,"createdDate":"2016-04-20 00:00:00.000","userCreatedId":"1","userCreatedFbName":"aa","userCreatedImageUrl":"aaa","userCreatedName":null,"userCreatedQualification":null},{"Id":"2","Name":"Shopping in Midvalley","Description":"Buying some clothes in Midvalley","isPrivate":"1","joinersLimit":"3","FromPeriod":"2016-04-11 04:07:00","ToPeriod":"2016-04-11 02:03:06","activityId":"2","activityDesc":"Outdoor","Address":"Mega Mall , Midvalley","LatLoc":null,"LngLoc":null,"createdDate":"2016-04-20 00:00:00.000","userCreatedId":"1","userCreatedFbName":"aa","userCreatedImageUrl":"aaa","userCreatedName":null,"userCreatedQualification":null}]
+
+
+
+2- getAllActivitiesByMonth 
+----------REQUEST--------------
+----------/header/--------------
+Request URL:http://seanloh.com/NDOH/v1/activity
+Request Method:POST
+Status Code:200 OK
+Remote Address:202.75.56.136:80 
+
+Content-Type:application/json; charset=UTF-8
+----------/body/--------------
+{"month":"APR"}
+
+*NOTE: VALUE ACCEPTABLE -->JAN,FEB,MAR,APR,MAY,JUN,JUL,AUG,SEP,OCT,NOV,DEC
+----------RESPONSE--------------
+[{"Id":"1","Name":"birthday party","Description":"I would like to organize a birthday party for my friend","isPrivate":"1","joinersLimit":"20","FromPeriod":"2016-04-09 03:10:00","ToPeriod":"2016-04-10 04:08:00","activityId":"1","activityDesc":"Party","Address":"Arvato Systems , Menara IMC","LatLoc":null,"LngLoc":null,"createdDate":"2016-04-20 00:00:00.000","userCreatedId":"1","userCreatedFbName":"aa","userCreatedImageUrl":"aaa","userCreatedName":null,"userCreatedQualification":null},{"Id":"2","Name":"Shopping in Midvalley","Description":"Buying some clothes in Midvalley","isPrivate":"1","joinersLimit":"3","FromPeriod":"2016-04-11 04:07:00","ToPeriod":"2016-04-11 02:03:06","activityId":"2","activityDesc":"Outdoor","Address":"Mega Mall , Midvalley","LatLoc":null,"LngLoc":null,"createdDate":"2016-04-20 00:00:00.000","userCreatedId":"1","userCreatedFbName":"aa","userCreatedImageUrl":"aaa","userCreatedName":null,"userCreatedQualification":null}]
+
+
+
+8-getActivitiesbyownerandmonth
+
+----------REQUEST--------------
+----------/header/--------------
+Request URL:http://seanloh.com/NDOH/v1/activity
+Request Method:POST
+Status Code:200 OK
+Remote Address:202.75.56.136:80 
+
+Content-Type:application/json; charset=UTF-8
+----------/body/--------------
+{"month":"APR", "createdBy":"1"}
+
+*NOTE: VALUE ACCEPTABLE month-->JAN,FEB,MAR,APR,MAY,JUN,JUL,AUG,SEP,OCT,NOV,DEC
+*NOTE: VALUE ACCEPTABLE createdBy-->id of user/joiner in int value.eg. "1","2"
+----------RESPONSE--------------
+[{"Id":"1","Name":"birthday party","Description":"I would like to organize a birthday party for my friend","isPrivate":"1","joinersLimit":"20","FromPeriod":"2016-04-09 03:10:00","ToPeriod":"2016-04-10 04:08:00","activityId":"1","activityDesc":"Party","Address":"Arvato Systems , Menara IMC","LatLoc":null,"LngLoc":null,"createdDate":"2016-04-20 00:00:00.000","userCreatedId":"1","userCreatedFbName":"aa","userCreatedImageUrl":"aaa","userCreatedName":null,"userCreatedQualification":null},{"Id":"2","Name":"Shopping in Midvalley","Description":"Buying some clothes in Midvalley","isPrivate":"1","joinersLimit":"3","FromPeriod":"2016-04-11 04:07:00","ToPeriod":"2016-04-11 02:03:06","activityId":"2","activityDesc":"Outdoor","Address":"Mega Mall , Midvalley","LatLoc":null,"LngLoc":null,"createdDate":"2016-04-20 00:00:00.000","userCreatedId":"1","userCreatedFbName":"aa","userCreatedImageUrl":"aaa","userCreatedName":null,"userCreatedQualification":null}]
+
+
+9-getActivitiesbyjoinerandmonth  
+----------REQUEST--------------
+----------/header/--------------
+Request URL:http://seanloh.com/NDOH/v1/joining
+Request Method:POST
+Status Code:200 OK
+Remote Address:202.75.56.136:80
+ 
+
+Content-Type:application/json; charset=UTF-8
+----------/body/--------------
+{"activityId":"1","joinerId":"1","month":"JUN"}
+
+*NOTE: VALUE ACCEPTABLE month-->JAN,FEB,MAR,APR,MAY,JUN,JUL,AUG,SEP,OCT,NOV,DEC
+*NOTE: VALUE ACCEPTABLE joinerId-->id of user/joiner in int value.eg. "1","2"
+*NOTE: VALUE ACCEPTABLE activityId-->id of activity  in int value.eg. "1","2"
+*NOTE: filter is for activityId and joinerId mandatory
+
+
+----------RESPONSE--------------
+
+[{"Id":"1","ActivityId":"1","isSpeaker":null,"Name":"birthday party","Description":"I would like to organize a birthday party for my friend","isPrivate":"1","joinersLimit":"20","FromPeriod":"2016-04-09 03:10:00","ToPeriod":"2016-04-10 04:08:00","activityId":"1","activityDesc":"Party","Address":"Arvato Systems , Menara IMC","LatLoc":null,"LngLoc":null,"userCreatedId":"1","createdDate":"2016-04-20 00:00:00.000","joinerId":"1","joinerFbUsername":"aa","joinerImageUrl":"aaa","joinerName":null,"joinerQualification":null},{"Id":"2","ActivityId":"2","isSpeaker":null,"Name":"Shopping in Midvalley","Description":"Buying some clothes in Midvalley","isPrivate":"1","joinersLimit":"3","FromPeriod":"2016-04-11 04:07:00","ToPeriod":"2016-04-11 02:03:06","activityId":"2","activityDesc":"Outdoor","Address":"Mega Mall , Midvalley","LatLoc":null,"LngLoc":null,"userCreatedId":"1","createdDate":"2016-04-20 00:00:00.000","joinerId":"2","joinerFbUsername":"bb","joinerImageUrl":"bb","joinerName":null,"joinerQualification":null}]
+
+
+
+12-listCommentsbyActivity 
+15- listphotosbyactivity
+----------REQUEST--------------
+----------/header/--------------
+Request URL:http://seanloh.com/NDOH/v1/activity
+Request Method:POST
+Status Code:200 OK
+Remote Address:202.75.56.136:80 
+
+Content-Type:application/json; charset=UTF-8
+----------/body/--------------
+{"activityId":"1" }
+
+*NOTE: VALUE ACCEPTABLE activityId-->id of activity  in int value.eg. "1","2"
+----------RESPONSE--------------
+
+{"comments":[{"Id":"1","Title":"fun activity!","Desc":"went there and wow","createdBy":"1","createdDate":null,"activityId":"1","JoinerFbUsername":"aa","JoinerImageUrl":"aaa","Name":null,"Qualification":null}],"photos":[{"Id":"1","url":"http:\/\/e2ua.com\/data\/wallpapers\/59\/WDF_1048495.jpg","Blob":null,"createdBy":"1","createdDate":null,"activityId":"1","JoinerFbUsername":"aa","JoinerImageUrl":"aaa","Name":null,"Qualification":null}],"activity":{"Id":"1","Name":"birthday party","Description":"I would like to organize a birthday party for my friend","isPrivate":"1","joinersLimit":"20","FromPeriod":"2016-04-09 03:10:00","ToPeriod":"2016-04-10 04:08:00","activityId":"1","activityDesc":"Party","Address":"Arvato Systems , Menara IMC","LatLoc":null,"LngLoc":null,"createdDate":"2016-04-20 00:00:00.000","userCreatedId":"1","userCreatedFbName":"aa","userCreatedImageUrl":"aaa","userCreatedName":null,"userCreatedQualification":null}}
+
+
+
+10-addComment
+----------REQUEST--------------
+----------/header/--------------
+Request URL:http://seanloh.com/NDOH/v1/comment  
+Request Method:POST
+Status Code:200 OK
+Remote Address:202.75.56.136:80 
+   
+Content-Type:application/json; charset=UTF-8
+----------/body/--------------
+
+{"desc":"desc","title":"tittle",
+"createdDate":"2016-02-01","createdBy":"1","activityId":"1"}
+
+
+*NOTE: please fill in valid int existing value for Id. Pass in blank if data not available.
+
+----------RESPONSE--------------
+{"affected_rows":null,"client_info":null,"client_version":null,"connect_errno":null,"connect_error":null,"errno":null,"error":null,"error_list":null,"field_count":null,"host_info":null,"info":null,"insert_id":null,"server_info":null,"server_version":null,"stat":null,"sqlstate":null,"protocol_version":null,"thread_id":null,"warning_count":null}
+
+
+
+11-removeComment 
+----------REQUEST--------------
+----------/header/--------------
+Request URL:http://seanloh.com/NDOH/v1/comment/:id  
+Request Method:DELETE
+Status Code:200 OK
+Remote Address:202.75.56.136:80 
+   
+Content-Type:application/json; charset=UTF-8
+----------/body/--------------
+
+{"desc":"desc","title":"tittle",
+"createdDate":"2016-02-01","createdBy":"1","activityId":"1"} 
+
+*NOTE: please replace :id with valid comment int id. 
+eg.http://seanloh.com/NDOH/v1/comment/8  
+
+----------RESPONSE--------------
+{"affected_rows":null,"client_info":null,"client_version":null,"connect_errno":null,"connect_error":null,"errno":null,"error":null,"error_list":null,"field_count":null,"host_info":null,"info":null,"insert_id":null,"server_info":null,"server_version":null,"stat":null,"sqlstate":null,"protocol_version":null,"thread_id":null,"warning_count":null}
+
+ 
+
+13-addPhoto   	  
+----------REQUEST--------------
+----------/header/--------------
+Request URL:http://seanloh.com/NDOH/v1/photo
+Request Method:POST
+Status Code:200 OK
+Remote Address:202.75.56.136:80 
+   
+Content-Type:application/json; charset=UTF-8
+----------/body/--------------
+
+ {"url":" " ,"blob":"tittle" ,"filedata":"BASE64-STRING","filename":"koala" ,"fileext":".jpg" ,"createdDate":"2016-02-01" ,"createdBy":"1" ,"activityId":"1"   } 
+
+*NOTE: please replace BASE64-STRING with valid base 64 data.  
+base64-image.de
+----------RESPONSE--------------
+
+{"path":"uploads\/koala1461575145571ddde90a75c2016-04-25.jpg"}
+
+
+14-removePhotos
+
+----------REQUEST--------------
+----------/header/--------------
+Request URL:http://seanloh.com/NDOH/v1/photo/:id  
+Request Method:DELETE
+Status Code:200 OK
+Remote Address:202.75.56.136:80 
+   
+Content-Type:application/json; charset=UTF-8
+----------/body/--------------
+
+{ } 
+
+*NOTE: please replace :id with valid photo int id. 
+eg.http://seanloh.com/NDOH/v1/photo/8  
+
+----------RESPONSE--------------
+{"affected_rows":null,"client_info":null,"client_version":null,"connect_errno":null,"connect_error":null,"errno":null,"error":null,"error_list":null,"field_count":null,"host_info":null,"info":null,"insert_id":null,"server_info":null,"server_version":null,"stat":null,"sqlstate":null,"protocol_version":null,"thread_id":null,"warning_count":null}
+
+
+
+3-  AddActivity
+ 
+----------REQUEST--------------
+----------/header/--------------
+Request URL:http://seanloh.com/NDOH/v1/event
+Request Method:POST
+Status Code:200 OK
+Remote Address:202.75.56.136:80 
+   
+Content-Type:application/json; charset=UTF-8
+----------/body/--------------
+   '{"name":"desc" ,"description":"tittle" ,"isPrivate":"1" ,"joinersLimit":"10" ,"activityType":"1" ,"fromPeriod":"2016-02-01" ,"toPeriod":"2016-02-01" ,"address":"address here" ,"latLoc":"100.55" ,"lngLoc":"200.55" ,"speakerId":"1" , "createdDate":"2016-02-01" ,"createdBy":"1"    }'; 
+
+*NOTE: please fill in all value accordingly.
+createdBy,speakerId,activityType is INT id. 
+createdBy,speakerId,activityType must be existing in table row.
+
+
+----------RESPONSE--------------
+
+{"affected_rows":null,"client_info":null,"client_version":null,"connect_errno":null,"connect_error":null,"errno":null,"error":null,"error_list":null,"field_count":null,"host_info":null,"info":null,"insert_id":null,"server_info":null,"server_version":null,"stat":null,"sqlstate":null,"protocol_version":null,"thread_id":null,"warning_count":null}
+
+4-  Remove Activity
+----------REQUEST--------------
+----------/header/--------------
+Request URL:http://seanloh.com/NDOH/v1/event/:ID
+Request Method:DELETE
+Status Code:200 OK
+Remote Address:202.75.56.136:80 
+   
+Content-Type:application/json; charset=UTF-8
+*NOTE: please replace :id with valid event int id. 
+eg.http://seanloh.com/NDOH/v1/event/8  
+----------/body/--------------
+{ }
+
+----------RESPONSE--------------
+ TRUE
+
+5-  EditActivity
+----------REQUEST--------------
+----------/header/--------------
+Request URL:http://seanloh.com/NDOH/v1/event 
+Request Method:PUT
+Status Code:200 OK
+Remote Address:202.75.56.136:80 
+   
+Content-Type:application/json; charset=UTF-8 
+----------/body/--------------
+{"activityId":"11","name":"DESC NAME","description":"tittle","isPrivate":"1","joinersLimit":"10","activityType":"1","fromPeriod":"2016-02-01","toPeriod":"2016-02-01","address":"address here","latLoc":"100.55","lngLoc":"200.55","speakerId":"1","createdDate":"2016-02-01","createdBy":"1"}
+
+*NOTE: please fill in all value accordingly.
+createdBy,speakerId,activityType is INT id. 
+createdBy,speakerId,activityType must be existing in table row.
+----------RESPONSE--------------
+ TRUE
+
+
+
+6-  JoinActivity
+ 
+----------REQUEST--------------
+----------/header/--------------
+Request URL:http://seanloh.com/NDOH/v1/EventParticipation 
+Request Method:POST
+Status Code:200 OK
+Remote Address:202.75.56.136:80 
+   
+Content-Type:application/json; charset=UTF-8 
+
+
+----------/body/--------------
+{"activityId":"1","joinerId":"2","isSpeaker":"1"}
+
+*NOTE: please fill in all value accordingly. 
+activityId,joinerId is INT id. 
+activityId,joinerId  activityType must be existing in table row."
+isSpeaker indicates if this user is a speaker for this event. use "1" or "0"
+
+----------RESPONSE--------------
+{"affected_rows":null,"client_info":null,"client_version":null,"connect_errno":null,"connect_error":null,"errno":null,"error":null,"error_list":null,"field_count":null,"host_info":null,"info":null,"insert_id":null,"server_info":null,"server_version":null,"stat":null,"sqlstate":null,"protocol_version":null,"thread_id":null,"warning_count":null}
+
+
+
+7-	UnjoinActivity
+ 
+----------REQUEST--------------
+----------/header/--------------
+Request URL:http://seanloh.com/NDOH/v1/EventParticipation/:joinerId
+Request Method:DELETE
+Status Code:200 OK
+Remote Address:202.75.56.136:80  
+Content-Type:application/json; charset=UTF-8 
+
+
+*NOTE: please replace :joinerId with valid   int joinerId to unsubscribe an event. 
+eg.http://seanloh.com/NDOH/v1/evEventParticipationent/8  
+----------/body/--------------
+{"activityId":"1" }
+
+*NOTE: please fill in all value accordingly. 
+activityId  is INT id. 
+activityId  activityType must be existing in table row. 
+
+----------RESPONSE--------------
+{"affected_rows":null,"client_info":null,"client_version":null,"connect_errno":null,"connect_error":null,"errno":null,"error":null,"error_list":null,"field_count":null,"host_info":null,"info":null,"insert_id":null,"server_info":null,"server_version":null,"stat":null,"sqlstate":null,"protocol_version":null,"thread_id":null,"warning_count":null}
+
+
+16- SIGNUP ADD user  
+
+----------REQUEST--------------
+----------/header/--------------
+Request URL:http://seanloh.com/NDOH/v1/user
+Request Method:POST
+Status Code:200 OK
+Remote Address:202.75.56.136:80  
+Content-Type:application/json; charset=UTF-8 
+ 
+----------/body/--------------
+{"joinerFbUsername":"walleed003","joinerImageUrl":"http://img.url/3","name":"Wally Eddy Mohd","qualification":"phd master sociology"}
+*NOTE: please fill in all value accordingly. Assign blank value if non.
+
+----------RESPONSE--------------
+{"affected_rows":null,"client_info":null,"client_version":null,"connect_errno":null,"connect_error":null,"errno":null,"error":null,"error_list":null,"field_count":null,"host_info":null,"info":null,"insert_id":null,"server_info":null,"server_version":null,"stat":null,"sqlstate":null,"protocol_version":null,"thread_id":null,"warning_count":null}
+
+
+17- REMOVE USER
+----------REQUEST--------------
+----------/header/--------------
+Request URL:http://seanloh.com/NDOH/v1/user/:userfbid
+Request Method:DELETE
+Status Code:200 OK
+Remote Address:202.75.56.136:80  
+Content-Type:application/json; charset=UTF-8  
+
+
+*NOTE: please replace :userfbid with valid string userfbid to unsubscribe an event. 
+eg.http://seanloh.com/NDOH/v1/user/walleed003  
+----------/body/--------------
+{ } 
+
+----------RESPONSE--------------
+ {"affected_rows":null,"client_info":null,"client_version":null,"connect_errno":null,"connect_error":null,"errno":null,"error":null,"error_list":null,"field_count":null,"host_info":null,"info":null,"insert_id":null,"server_info":null,"server_version":null,"stat":null,"sqlstate":null,"protocol_version":null,"thread_id":null,"warning_count":null}
+
+
+
+18 - add activityType
+
+
+----------REQUEST--------------
+----------/header/--------------
+Request URL:http://seanloh.com/NDOH/v1/ActivityType
+Request Method:POST
+Status Code:200 OK
+Remote Address:202.75.56.136:80  
+Content-Type:application/json; charset=UTF-8 
+   
+----------/body/--------------
+{"name":"Gardening and recreational"   }
+*NOTE: please fill in all value accordingly. Assign blank value if non.
+
+----------RESPONSE--------------
+{"affected_rows":null,"client_info":null,"client_version":null,"connect_errno":null,"connect_error":null,"errno":null,"error":null,"error_list":null,"field_count":null,"host_info":null,"info":null,"insert_id":null,"server_info":null,"server_version":null,"stat":null,"sqlstate":null,"protocol_version":null,"thread_id":null,"warning_count":null}
+
+
+
+19- remove activityType
+----------REQUEST--------------
+----------/header/--------------
+Request URL:http://seanloh.com/NDOH/v1/ActivityType/:id
+Request Method:DELETE
+Status Code:200 OK
+Remote Address:202.75.56.136:80  
+Content-Type:application/json; charset=UTF-8  
+
+
+*NOTE: please replace :id with valid string id to unsubscribe an event. 
+eg.http://seanloh.com/NDOH/v1/user/3  
+----------/body/--------------
+{ }  
+----------RESPONSE--------------
+{"affected_rows":null,"client_info":null,"client_version":null,"connect_errno":null,"connect_error":null,"errno":null,"error":null,"error_list":null,"field_count":null,"host_info":null,"info":null,"insert_id":null,"server_info":null,"server_version":null,"stat":null,"sqlstate":null,"protocol_version":null,"thread_id":null,"warning_count":null}
+
