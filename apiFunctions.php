@@ -38,6 +38,7 @@ function queryDB($statement) {
  function getJsonResponse( $app,$jsonData) {
 		  $jsonType = "application/json;charset=utf-8"; 	 
 		  header("Content-Type:  " .  $jsonType);
+
 		// header('Access-Control-Allow-Origin: *');
 		header("Access-Control-Allow-Credentials: true"); 
 		header('Access-Control-Allow-Headers: X-Requested-With');
@@ -47,7 +48,8 @@ function queryDB($statement) {
 		$response = $app->response();
 		$response['Content-Type'] = $jsonType; 
 		 
-		$response->body(json_encode($jsonData));
+		$response->headers->set('Content-Type',$jsonType );
+		$response->body(json_encode($jsonData,JSON_UNESCAPED_UNICODE));
 	//alternate / basic way return json
 	//echo json_encode($jsonData)
 	//WILL CAUSE 404 -NOT FOUND
@@ -433,8 +435,9 @@ function deleteActivityEvent( $app,$activityId )  {
 		// $valueStatement =$valueStatement . "'1'  )"; 
 		//  "joiningId"=>$mysqli->insert_id,
 		  // $mysqli =crudDB( $sqlStatement .$valueStatement );    
-		  $result = array("ownerJoiningId"=>$ownerJoiningId,"activityId"=>$activityId,"status"=> true ); 
+		  $result = array("ownerJoiningId"=>$ownerJoiningId,"activityId"=>$activityId,"status"=> true   ); 
 	     getJsonResponse( $app,  $result ); 
+
  
   }
 

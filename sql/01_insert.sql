@@ -1,30 +1,30 @@
-INSERT INTO  `seanlohc_ndoh`.`Speaking` (
+INSERT INTO  `seanlohc_NDOH`.`Speaking` (
 `Id` ,
 `ActivityId` ,
 `SpeakerId`
 ) 
 VALUES ( '1',  '1',  '1' );
-INSERT INTO  `seanlohc_ndoh`.`Speaking` (
+INSERT INTO  `seanlohc_NDOH`.`Speaking` (
 `Id` ,
 `ActivityId` ,
 `SpeakerId`
 )
 VALUES ( '2',  '2',  '2' );
-INSERT INTO  `seanlohc_ndoh`.`Speaking` (
+INSERT INTO  `seanlohc_NDOH`.`Speaking` (
 `Id` ,
 `ActivityId` ,
 `SpeakerId`
 )
 VALUES ( '3',  '3',  '3' );
 
-INSERT INTO  `seanlohc_ndoh`.`Speaker` (
+INSERT INTO  `seanlohc_NDOH`.`Speaker` (
 `Id` ,
 `Name` ,
 `Qualification`
 )
 VALUES ( '1',  '1',  '1' ), ( '2',  '2',  '2' );
 
-INSERT INTO  `seanlohc_ndoh`.`Joining` (
+INSERT INTO  `seanlohc_NDOH`.`Joining` (
 `Id` ,
 `ActivityId` ,
 `JoinerId`
@@ -34,7 +34,7 @@ VALUES (
 ), (
 '2',  '2',  '2'
 );
-INSERT INTO  `seanlohc_ndoh`.`Joiner` (
+INSERT INTO  `seanlohc_NDOH`.`Joiner` (
 `Id` ,
 `JoinerFbUsername` ,
 `JoinerImageUrl`
@@ -45,7 +45,7 @@ VALUES (
 '2',  'bb',  'bb'
 );
 
-INSERT INTO  `seanlohc_ndoh`.`ActivityType` (
+INSERT INTO  `seanlohc_NDOH`.`ActivityType` (
 `Id` ,
 `Name`  
 )
@@ -62,7 +62,7 @@ VALUES (
 ) ;
 
  
- iNSERT INTO  `seanlohc_ndoh`.`Comment` (
+ iNSERT INTO  `seanlohc_NDOH`.`Comment` (
 `Id` ,
 `Title` ,
 `Desc` ,
@@ -77,7 +77,7 @@ VALUES (
 );
 
 
-iNSERT INTO  `seanlohc_ndoh`.`Photo` (
+iNSERT INTO  `seanlohc_NDOH`.`Photo` (
 `Id` ,
 `Url` ,
 `Blob` ,
