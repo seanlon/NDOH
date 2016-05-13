@@ -88,3 +88,27 @@ iNSERT INTO  `seanlohc_NDOH`.`Photo` (
 VALUES (
 '1',  'http://e2ua.com/data/wallpapers/59/WDF_1048495.jpg', NULL ,  '1', NULL ,  '1'
 );
+
+
+INSERT INTO  `seanlohc_NDOH`.`Country` (
+`Id` ,
+`shortName` ,
+`Name` ,
+`isBanned`
+)
+VALUES (
+'1',  'MY',  'Malaysian  ',  '0'
+), (
+'2',  'UAE',  'United Emirate Arab',  '0'
+);
+
+INSERT INTO  `seanlohc_NDOH`.`Currency` (
+`Id` ,
+`Name` ,
+`countryId`
+)
+VALUES (
+'1',  'MYR',  '1'
+), (
+'2',  'Dina',  '2'
+);

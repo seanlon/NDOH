@@ -1,0 +1,40 @@
+country-->code, description  ==>crud new service
+currency--> code,desc, origin country ===>crud new service
+
+
+activity --- > price ,currencycode ,country
+	-read: update resp //. update req //
+	- write: new fields  //
+	- update: new fieelds //
+	 
+
+joining participants-->isApproved
+	-read: update resp fld . update req fld
+	- write: new fields. [owner is auto approved]
+	- update: new fieelds.
+	 
+
+user -- > bank name, bnank acc no, bank acc name 
+	-read: update resp fld . update req fld
+	- write: new fields. [owner is auto approved]
+	- update: new fieelds.
+
+
+--existing service--
+new activity created by owner --->isApproved
+
+--NEW SERVICE -- 
+FOR ACTIVITY OWNER TO 
+
+1)
+crud joining table row user
+'DELETE' -->REMOVE USER FROM 
+'PENDING' -->isapproved=false
+'APPROVED' -->isapproved=true
+
+
+2) form service 
+	- get country code
+	- get currency code
+	
+	 

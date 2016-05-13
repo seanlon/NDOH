@@ -49,7 +49,7 @@
 
         $("form[ajax=true]").submit(function(e) { 
             e.preventDefault(); 
-            var form_data = '{"activityId":"1" ,"joinerId":"2" , "isSpeaker":"1" }';
+            var form_data = '{"activityId":"1" ,"joinerId":"2" , "isSpeaker":"1" ,"isApproved":"0" }';
             var form_url = "http://seanloh.com/NDOH/v1/EventParticipation";
             var form_method = "POST";
 

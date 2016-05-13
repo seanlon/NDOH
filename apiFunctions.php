@@ -140,6 +140,9 @@ function getPhotoByActivity($activityId)
 		   photo.Blob , photo.createdBy,photo.createdDate,
 		   photo.activityId  ,
 		   user.JoinerFbUsername,user.JoinerImageUrl,
+            user.bankName as BankName,
+            user.accName as AccName,
+            user.accNo as AccNo,
 		   user.Name,user.Qualification  FROM Photo photo, Joiner user ';
     $whereStatement = " where 1=1  and  photo.createdBy= user.Id ";
     
@@ -159,6 +162,9 @@ function getCommentByActivity($activityId)
 		   com.Desc , com.createdBy,com.createdDate,
 		   com.activityId ,
 		   user.JoinerFbUsername,user.JoinerImageUrl,
+            user.bankName as BankName,
+            user.accName as AccName,
+            user.accNo as AccNo,
 		   user.Name,user.Qualification   FROM Comment com, Joiner user ';
     $whereStatement = " where 1=1  and  com.createdBy= user.Id ";
     
@@ -180,7 +186,9 @@ function getActivityListing($app)
 				a.Description ,
 				a.isPrivate ,
 				a.joinersLimit  ,
-				a.FromPeriod,
+				a.FromPeriod,a.price, 
+                a.currencyId, cr.name as currencyName, cr.countryId as currencyCountryId,
+                a.countryId,c.shortName as countryShortName,c.name as countryName, c.isBanned as countryIsBanned, 
 				a.ToPeriod,
 				a.ActivityType as activityId ,  t.name as activityDesc ,   
 				a.Address  ,
@@ -191,11 +199,13 @@ function getActivityListing($app)
 				a.createdBy as userCreatedId,
 				user.JoinerFbUsername as userCreatedFbName  , 
 				user.JoinerImageUrl  as userCreatedImageUrl,
-				user.Name  as userCreatedName, 
-				user.Qualification as userCreatedQualification 
-			
+                user.Name  as userCreatedName,  
+                user.bankName as BankName,
+                user.accName as AccName,
+                user.accNo as AccNo,
+                user.Qualification as userCreatedQualification 
 		  
-			 FROM ActivityType t  , Joiner user, Activity a    ';
+			 FROM ActivityType t  , Joiner user, Activity a  ,Currency cr , Country c  ';
     
     // $joinStatement="
     
@@ -205,6 +215,8 @@ function getActivityListing($app)
     $whereStatement = " where 1=1 
 							and a.ActivityType=t.Id 
 						   	and a.createdBy=user.Id  
+                            and a.currencyId=cr.Id  
+                            and a.countryId=c.Id  
 						   	 ";
     
     $orderStatement = "  ORDER BY a.FromPeriod ASC  ";
@@ -244,6 +256,23 @@ function getActivityListing($app)
     $filterAddress = getKeyVal($reqParam, "address");
     if (!empty($filterAddress)) {
         $whereStatement = $whereStatement . " and a.address like '%" . $filterAddress . "%'";
+    }
+     $filtercurrencyId = getKeyVal($reqParam, "currencyId");
+    if (!empty($filtercurrencyId)) {
+        $whereStatement = $whereStatement . " and a.currencyId = '" . $filtercurrencyId . "'";
+    }   
+    $filterpriceMin = getKeyVal($reqParam, "priceMin");
+    if (!empty($filterpriceMin)) {
+        $whereStatement = $whereStatement . " and a.priceMin >= " . $filterpriceMin . " ";
+    }
+      $filterpriceMax = getKeyVal($reqParam, "priceMax");
+    if (!empty($filterpriceMax)) {
+        $whereStatement = $whereStatement . " and a.priceMax =<" . $filterpriceMax . " ";
+    }
+    
+     $filtercountryId = getKeyVal($reqParam, "countryId");
+    if (!empty($filtercountryId)) {
+        $whereStatement = $whereStatement . " and a.countryId = '" . $filtercountryId . "'";
     }
     
     $filterCreatedDate = getKeyVal($reqParam, "createdDate");
@@ -351,6 +380,9 @@ function addNewActivityEvent($app)
 						`Address` ,
 						`LatLoc` ,
 						`LngLoc` ,
+                        `price` ,
+                        `currencyId` ,
+                        `countryId` ,
 						`createdDate` ,
 						`createdBy`  
  						)  ";
@@ -399,6 +431,18 @@ function addNewActivityEvent($app)
     if (!empty($lngLoc)) {
         $valueStatement = $valueStatement . "'" . $lngLoc . "',";
     }
+    $price = getKeyVal($reqParam, "price");
+    if (!empty($price)) {
+        $valueStatement = $valueStatement . "'" . $price . "',";
+    }
+    $currencyId = getKeyVal($reqParam, "currencyId");
+    if (!empty($currencyId)) {
+        $valueStatement = $valueStatement . "'" . $currencyId . "',";
+    }
+    $countryId = getKeyVal($reqParam, "countryId");
+    if (!empty($countryId)) {
+        $valueStatement = $valueStatement . "'" . $countryId . "',";
+    }
     $createdDate = getKeyVal($reqParam, "createdDate");
     if (!empty($createdDate)) {
         $valueStatement = $valueStatement . "'" . $createdDate . "',";
@@ -415,7 +459,8 @@ function addNewActivityEvent($app)
     $sqlStatement   = "INSERT INTO  Joining ( 
 						`ActivityId` ,
 						`JoinerId` ,
-						`isSpeaker`  
+						`isApproved` , 
+                        `isSpeaker`  
  						)  ";
     
     $valueStatement = "VALUES (";
@@ -428,7 +473,11 @@ function addNewActivityEvent($app)
     if (!empty($createdBy)) {
         $valueStatement = $valueStatement . "'" . $createdBy . "',";
     }
-    
+    //owner is approved
+    $isApproved = getKeyVal($reqParam, "isApproved");
+    if (!empty($isApproved)) {
+        $valueStatement = $valueStatement . "'1', ";
+    }
     $valueStatement = $valueStatement . "'0'  )";
     
     $mysqli         = crudDB($sqlStatement . $valueStatement);
@@ -515,6 +564,22 @@ function editActivityEvent($app)
         $setStatement = $setStatement . " fromPeriod='" . $fromPeriod . "' ,";
     }
     
+    $countryId = getKeyVal($reqParam, "countryId");
+    if (!empty($countryId)) {
+        $setStatement = $setStatement . " countryId='" . $countryId . "' ,";
+    }
+    $currencyId = getKeyVal($reqParam, "currencyId");
+    if (!empty($currencyId)) {
+        $setStatement = $setStatement . " currencyId='" . $currencyId . "' ,";
+    }
+    $price = getKeyVal($reqParam, "price");
+    if (!empty($price)) {
+        $setStatement = $setStatement . " price='" . $price . "' ,";
+    }
+    $activityId = getKeyVal($reqParam, "activityId");
+    if (!empty($activityId)) {
+        $setStatement = $setStatement . " activityId='" . $activityId . "' ,";
+    }
     $createdDate = getKeyVal($reqParam, "createdDate");
     if (!empty($createdDate)) {
         $setStatement = $setStatement . " createdDate='" . $createdDate . "' ,";
@@ -745,6 +810,77 @@ function deleteActivityType($app, $id)
     
 }
 
+function getCurrency($currencyId )
+{ 
+    $sqlStatement   = 'SELECT id, name,countryId  FROM currency';
+    $whereStatement = " where 1=1 " ;
+
+    if (!empty($currencyId)) {
+        $whereStatement = $whereStatement . " and id = '" . $currencyId . "'";
+    }
+    
+    $sqlStatement = $sqlStatement . $whereStatement . " ; ";
+    $data         = queryDB($sqlStatement);
+    return $data;
+}
+function getCountry($countryId )
+{
+ 
+    $sqlStatement   = 'SELECT id,shortName,name,isBanned  FROM Country';
+    $whereStatement = " where 1=1 " ;
+    if (!empty($countryId)) {
+        $whereStatement = $whereStatement . " and id = '" . $countryId . "'";
+    }
+    
+    $sqlStatement = $sqlStatement . $whereStatement . " ; ";
+    $data         = queryDB($sqlStatement);
+    return $data;
+}
+function getFormService($app){
+    $list=null;
+    $list['country']=  getCountry(null ); 
+    $list['currency']=  getCurrency(null ); 
+    return  getJsonResponse($app, $list);  
+ }
+
+
+function modifyUserStatus($app)
+{    
+    $reqParam = getJsonRequest($app); 
+    $joinerId     = getKeyVal($reqParam, "joinerId");
+    $activityId     = getKeyVal($reqParam, "activityId");
+    $action     = getKeyVal($reqParam, "action");
+
+    if (!empty($action) && !empty($activityId)&& !empty($joinerId)) { 
+         if ( "PENDING"==($action)  ||  "APPROVE"==($action)) {
+            $sqlStatement   = " Update  Joining  ";
+            $setStatement   = " SET "; 
+             if ( "PENDING"==($action)) {
+                  $setStatement = $setStatement . " isapproved='0'  ";
+             }
+             else  if ( "APPROVE"==($action)) {
+                  $setStatement = $setStatement . " isapproved='1'  ";
+             }
+             $whereStatement = " WHERE joinerId='" . $joinerId . "'  and activityId='". $activityId . "'"; 
+             $mysqli = crudDB($sqlStatement . $setStatement . $whereStatement);
+              getJsonResponse($app, $mysqli);  
+          }
+          else  if ( "REMOVE"== $action  ) {
+
+                $sqlStatement = "DELETE FROM Joining WHERE joinerId='". $joinerId . "'" . "  and activityId='". $activityId . "'"; 
+                $data = crudDB($sqlStatement); 
+                    $result = array(
+                        "status" => true,
+                        "data" => $data
+                    );
+                getJsonResponse($app, $result);  
+        }
+     } 
+ 
+        getJsonResponse($app, false);  
+    
+}
+
 function addUser($app)
 {
     $reqParam         = getJsonRequest($app);
@@ -755,14 +891,20 @@ function addUser($app)
 						`joinerFbUsername` ,
 						`joinerImageUrl` ,
 						`name`  ,
-						`qualification`   
+                        `bankName`  ,  
+                        `accNo`  , 
+                        `accName`    ,
+                        `qualification`   
  						 from Joiner  where joinerFbUsername='" . $joinerFbUsername . "'";
-    $data         = queryDB($sqlStatement);
+    $data  = queryDB($sqlStatement);
     if (empty($data)) {
         $sqlStatement = "INSERT INTO  Joiner ( 
 						`joinerFbUsername` ,
 						`joinerImageUrl` ,
 						`name`  ,
+                        `bankName`  ,  
+                        `accNo`  , 
+                        `accName`   ,
 						`qualification`   
  						)  ";
         
@@ -779,6 +921,18 @@ function addUser($app)
         $name = getKeyVal($reqParam, "name");
         if (!empty($name)) {
             $valueStatement = $valueStatement . "'" . $name . "' ,";
+        }
+        $bankName = getKeyVal($reqParam, "bankName");
+        if (!empty($bankName)) {
+            $valueStatement = $valueStatement . "'" . $bankName . "' ,";
+        }
+        $accNo = getKeyVal($reqParam, "accNo");
+        if (!empty($accNo)) {
+            $valueStatement = $valueStatement . "'" . $accNo . "' ,";
+        }
+        $accName = getKeyVal($reqParam, "accName");
+        if (!empty($accName)) {
+            $valueStatement = $valueStatement . "'" . $accName . "' ,";
         }
         $qualification = getKeyVal($reqParam, "qualification");
         if (!empty($qualification)) {
@@ -845,6 +999,7 @@ function addEventParticipation($app)
     $sqlStatement = "INSERT INTO  Joining ( 
 						`activityId` ,
 						`joinerId` ,
+                        `isApproved` , 
 						`isSpeaker`  
  						)  ";
     
@@ -858,6 +1013,12 @@ function addEventParticipation($app)
     if (!empty($joinerId)) {
         $valueStatement = $valueStatement . "'" . $joinerId . "',";
     }
+    
+    $isApproved = getKeyVal($reqParam, "isApproved");
+    if (!empty($isApproved)) {
+        $valueStatement = $valueStatement . "'" . $isApproved . "',";
+    }
+
     $isSpeaker = getKeyVal($reqParam, "isSpeaker");
     if (!empty($isSpeaker)) {
         $valueStatement = $valueStatement . "'" . $isSpeaker . "' ";
@@ -913,7 +1074,9 @@ function getJoiningListing($app)
 						a.isPrivate ,
 						a.joinersLimit  ,
 						a.FromPeriod,
-						a.ToPeriod,
+						a.ToPeriod,a.price,
+                        a.currencyId, cr.name as currencyName, cr.countryId as currencyCountryId,
+                        a.countryId,c.shortName as countryShortName,c.name as countryName, c.isBanned as countryIsBanned,
 						a.ActivityType as activityId ,  
 						t.name as activityDesc ,   
 						a.Address  ,
@@ -921,18 +1084,21 @@ function getJoiningListing($app)
 						a.LngLoc ,
 						a.createdBy as userCreatedId,
 						a.createdDate ,
-						j.JoinerId as joinerId,	 
+						j.JoinerId as joinerId,	 j.isApproved,
 						user.JoinerFbUsername  as joinerFbUsername,   
 						user.JoinerImageUrl   as joinerImageUrl, 
 						user.Name  as  joinerName, 
-						user.Qualification as  joinerQualification  
-					    FROM Joining j, ActivityType t, Joiner user, Activity a  ';
+						user.Qualification as  joinerQualification  ,
+                        user.bankName as  joinerBankName  ,
+                        user.accNo as  joinerAccNo  ,
+                        user.accName as  joinerAccName  ,
+					    FROM Joining j, ActivityType t, Joiner user, Activity a ,Country c, Currency cr ';
     
     // $joinStatement=" 
     // LEFT OUTER JOIN Photo photo ON a.photoid = photo.Id 
     // LEFT OUTER JOIN Comment comment ON a.commentid = comment.Id   
     //  ";
-    $whereStatement = " where 1=1 and j.ActivityId=a.Id and j.joinerId=user.Id  and a.ActivityType=t.Id  ";
+    $whereStatement = " where 1=1 and j.ActivityId=a.Id and j.joinerId=user.Id  and a.ActivityType=t.Id  and a.currencyId=cr.Id and a.countryId=c.Id  ";
     
     $orderStatement   = "  ORDER BY a.FromPeriod ASC  ";
     $filterActivityId = getKeyVal($reqParam, "activityId");
@@ -972,6 +1138,11 @@ function getJoiningListing($app)
     if (!empty($filterName)) {
         $whereStatement = $whereStatement . " and a.name like '%" . $filterName . "%'";
     }
+
+    $filterisApproved = getKeyVal($reqParam, "isApproved");
+    if (!empty($filterisApproved)) {
+        $whereStatement = $whereStatement . " and j.isApproved ='" . $filterisApproved . "'";
+    }
     
     $filterDescription = getKeyVal($reqParam, "description");
     if (!empty($filterDescription)) {
@@ -981,6 +1152,25 @@ function getJoiningListing($app)
     if (!empty($filterAddress)) {
         $whereStatement = $whereStatement . " and a.address like '%" . $filterAddress . "%'";
     }
+    $filterpriceMin = getKeyVal($reqParam, "priceMin");
+    if (!empty($filterpriceMin)) {
+        $whereStatement = $whereStatement . " and a.priceMin >= " . $filterpriceMin . " ";
+    }
+      $filterpriceMax = getKeyVal($reqParam, "priceMax");
+    if (!empty($filterpriceMax)) {
+        $whereStatement = $whereStatement . " and a.priceMax =<" . $filterpriceMax . " ";
+    }
+    
+    $filtercurrencyId = getKeyVal($reqParam, "currencyId");
+    if (!empty($filtercurrencyId)) {
+        $whereStatement = $whereStatement . " and a.currencyId like '%" . $filtercurrencyId . "%'";
+    }
+    
+    $filtercountryId = getKeyVal($reqParam, "countryId");
+    if (!empty($filtercountryId)) {
+        $whereStatement = $whereStatement . " and a.countryId like '%" . $filtercountryId . "%'";
+    }
+    
     
     $filterCreatedDate = getKeyVal($reqParam, "createdDate");
     if (!empty($filterCreatedDate)) {
@@ -1002,6 +1192,9 @@ function getJoinerListing($app)
     $reqParam       = getJsonRequest($app);
     $sqlStatement   = ' SELECT Id  ,
 						JoinerFbUsername  , 
+                        bankName as BankName,
+                        accName as AccName,
+                        accNo as AccNo,
 						JoinerImageUrl 
 						  FROM Joiner ';
     $whereStatement = " where 1=1 ";
@@ -1012,6 +1205,24 @@ function getJoinerListing($app)
     if (!empty($filterJoinerImageUrl)) {
         $whereStatement = $whereStatement . " and JoinerImageUrl like '%" . $filterJoinerImageUrl . "%'";
     }
+    
+    $filterbankName = getKeyVal($reqParam, "bankName");
+    if (!empty($filterbankName)) {
+        $whereStatement = $whereStatement . " and bankName like '%" . $filterbankName . "%'";
+    }
+    
+    
+    $filteraccNo = getKeyVal($reqParam, "accNo");
+    if (!empty($filteraccNo)) {
+        $whereStatement = $whereStatement . " and accNo like '%" . $filteraccNo . "%'";
+    }
+    
+    
+    $filteraccName = getKeyVal($reqParam, "accName");
+    if (!empty($filteraccName)) {
+        $whereStatement = $whereStatement . " and accName like '%" . $filteraccName . "%'";
+    }
+    
     
     $filterJoinerFbUsername = getKeyVal($reqParam, "joinerFbUserName");
     if (!empty($filterJoinerFbUsername)) {

@@ -103,6 +103,7 @@ ADD createdDate  DATETIME( 3 )
  --13may2016- sean : add country code 
 CREATE TABLE  `Country` (
  `Id` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT ,
+ `shortName` VARCHAR(15 )  ,
  `Name` VARCHAR( 255 )  ,
  `isBanned`  TINYINT( 1 ) ,
 PRIMARY KEY (  `id` )
@@ -119,7 +120,8 @@ PRIMARY KEY (  `id` )
 
  --13may2016- sean : add price for event   
 ALTER TABLE Activity
-ADD price DOUBLE(8, 2) 
+ADD price DOUBLE(8, 2) ,
+ADD countryId INT( 10 )   ,
 ADD currencyId INT( 10 )     ;
 
 
@@ -130,6 +132,6 @@ ADD isApproved TINYINT( 1 );
 
  --13may2016- sean : add  bank name, bnank acc no, bank acc name  for user   Joiner
 ALTER TABLE Joiner
-ADD  `bankName` VARCHAR( 255 )   
-ADD  `accName` VARCHAR( 255 )   
-ADD  `accNo` VARCHAR( 100 )    
+ADD  `bankName` VARCHAR( 255 )   ,
+ADD  `accName` VARCHAR( 255 )   ,
+ADD  `accNo` VARCHAR( 100 )    ;

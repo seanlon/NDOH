@@ -168,6 +168,16 @@ $app->post($GLOBALS['pathapi'] . '/user', function() use ($app)
     addUser($app);
 });
 
+//modify User approval via  put
+$app->put($GLOBALS['pathapi'] . '/UserApproval', function() use ($app)
+{
+    modifyUserStatus($app);
+});
+//FORM SERVICE
+$app->post($GLOBALS['pathapi'] . '/FormService', function() use ($app)
+{
+    getFormService($app);
+});
 
 //del EventParticipation via delete
 $app->delete($GLOBALS['pathapi'] . '/EventParticipation/:joinerId', function($joinerId) use ($app)
