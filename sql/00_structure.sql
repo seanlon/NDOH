@@ -9,7 +9,9 @@ CREATE TABLE  `Activity` (
  `ToPeriod` DATETIME( 3 ) ,
  `Address` VARCHAR( 255 ) , 
  `LngLoc` VARCHAR( 100 ) ,
- `LatLoc` INT( 10 ) ,
+ `LatLoc` INT( 10 ) , 
+  `price` DOUBLE(8, 2) ,
+  `currencyId` INT( 10 ) ,
   `createdBy` VARCHAR( 100 ) ,   
   `createdDate`  DATETIME( 3 )   , 
 PRIMARY KEY (  `id` )
@@ -26,7 +28,7 @@ PRIMARY KEY (  `id` )
  `Id` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT ,
  `ActivityId` INT( 10 )  ,
  `JoinerId` INT( 10 )  , 
- `isSpeaker` TINYINT( 1 ) ,
+ `isSpeaker` TINYINT( 1 ) ,`isApproved` TINYINT( 1 ),
 PRIMARY KEY (  `id` )
 ) ENGINE = MYISAM DEFAULT CHARSET = UTF8 AUTO_INCREMENT =1;
  
@@ -37,7 +39,10 @@ PRIMARY KEY (  `id` )
  `JoinerFbUsername` VARCHAR( 255 ) ,
  `JoinerImageUrl` VARCHAR( 255 ) ,
  `Name` VARCHAR( 255 ) ,
- `Qualification` VARCHAR( 255 ) , 
+ `Qualification` VARCHAR( 255 ) ,  
+   `bankName` VARCHAR( 255 ) ,  
+   `accName` VARCHAR( 255 )   ,
+   `accNo` VARCHAR( 100 )   ,
 PRIMARY KEY (  `id` )
 ) ENGINE = MYISAM DEFAULT CHARSET = UTF8 AUTO_INCREMENT =1;
  
@@ -95,17 +100,36 @@ ADD createdDate  DATETIME( 3 )
 
 
 
--- CREATE TABLE  `Speaker` (
---  `Id` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT ,
---  `Name` VARCHAR( 255 ) ,
---  `Qualification` VARCHAR( 255 ) , 
--- PRIMARY KEY (  `id` )
--- ) ENGINE = MYISAM DEFAULT CHARSET = UTF8 AUTO_INCREMENT =1;
+ --13may2016- sean : add country code 
+CREATE TABLE  `Country` (
+ `Id` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT ,
+ `Name` VARCHAR( 255 )  ,
+ `isBanned`  TINYINT( 1 ) ,
+PRIMARY KEY (  `id` )
+) ENGINE = MYISAM DEFAULT CHARSET = UTF8 AUTO_INCREMENT =1;
 
--- CREATE TABLE  `Speaking` (
---  `Id` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT ,
---  `ActivityId` INT( 10 )  ,
---  `SpeakerId` INT( 10 )  , 
--- PRIMARY KEY (  `id` )
--- ) ENGINE = MYISAM DEFAULT CHARSET = UTF8 AUTO_INCREMENT =1;
 
+ --13may2016- sean : add currency  
+CREATE TABLE  `Currency` (
+ `Id` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT ,
+ `Name` VARCHAR( 255 )  ,
+ `countryId` INT( 10 ),
+PRIMARY KEY (  `id` )
+) ENGINE = MYISAM DEFAULT CHARSET = UTF8 AUTO_INCREMENT =1;
+
+ --13may2016- sean : add price for event   
+ALTER TABLE Activity
+ADD price DOUBLE(8, 2) 
+ADD currencyId INT( 10 )     ;
+
+
+ --13may2016- sean : add isApproved status for Joining   
+ALTER TABLE Joining
+ADD isApproved TINYINT( 1 );  
+
+
+ --13may2016- sean : add  bank name, bnank acc no, bank acc name  for user   Joiner
+ALTER TABLE Joiner
+ADD  `bankName` VARCHAR( 255 )   
+ADD  `accName` VARCHAR( 255 )   
+ADD  `accNo` VARCHAR( 100 )    
