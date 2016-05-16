@@ -1,8 +1,7 @@
 <?php
 
 function connectDB()
-{
-    require_once 'lib/mysql.php';
+{ 
     $db = connect_db();
     return $db;
 }
@@ -42,9 +41,7 @@ function getJsonRequest($app)
 function getJsonResponse($app, $jsonData)
 {
     $jsonType = "application/json;charset=utf-8";
-    header("Content-Type:  " . $jsonType);
-    
-    // header('Access-Control-Allow-Origin: *');
+      header("Content-Type:  " . $jsonType);  
     header("Access-Control-Allow-Credentials: true");
     header('Access-Control-Allow-Headers: X-Requested-With');
     header('Access-Control-Allow-Headers: Content-Type');
@@ -205,18 +202,19 @@ function getActivityListing($app)
                 user.accNo as AccNo,
                 user.Qualification as userCreatedQualification 
 		  
-			 FROM ActivityType t  , Joiner user, Activity a  ,Currency cr , Country c  ';
+			 FROM ActivityType t  , Joiner user, Activity a   ';
     
-    // $joinStatement="
-    
-    // LEFT OUTER JOIN Photo photo ON a.photoid = photo.Id 
-    // LEFT OUTER JOIN Comment comment ON a.commentid = comment.Id  
-    //  ";
+    $joinStatement="
+        LEFT JOIN Country c 
+        ON a.countryId=c.Id  
+     
+        LEFT JOIN Currency cr
+        ON a.currencyId=cr.Id   
+     ";
+
     $whereStatement = " where 1=1 
 							and a.ActivityType=t.Id 
-						   	and a.createdBy=user.Id  
-                            and a.currencyId=cr.Id  
-                            and a.countryId=c.Id  
+						   	and a.createdBy=user.Id   
 						   	 ";
     
     $orderStatement = "  ORDER BY a.FromPeriod ASC  ";
@@ -293,7 +291,7 @@ function getActivityListing($app)
         $photoList      = getPhotoByActivity($filterActivityId);
     }
     
-    $sqlStatement = $sqlStatement . $whereStatement . $orderStatement . " ; ";
+    $sqlStatement = $sqlStatement .$joinStatement . $whereStatement . $orderStatement . " ; ";
     $data         = queryDB($sqlStatement);
     if (!empty($data) && !empty($filterActivityId)) {
         $activityResult   = $data[0];
@@ -812,7 +810,7 @@ function deleteActivityType($app, $id)
 
 function getCurrency($currencyId )
 { 
-    $sqlStatement   = 'SELECT id, name,countryId  FROM currency';
+    $sqlStatement   = 'SELECT id, name,countryId  FROM Currency';
     $whereStatement = " where 1=1 " ;
 
     if (!empty($currencyId)) {
@@ -840,6 +838,7 @@ function getFormService($app){
     $list=null;
     $list['country']=  getCountry(null ); 
     $list['currency']=  getCurrency(null ); 
+      $list['action']= array("REMOVE","PENDING","APPROVE");
     return  getJsonResponse($app, $list);  
  }
 
@@ -876,8 +875,7 @@ function modifyUserStatus($app)
                 getJsonResponse($app, $result);  
         }
      } 
- 
-        getJsonResponse($app, false);  
+  
     
 }
 
@@ -1091,14 +1089,19 @@ function getJoiningListing($app)
 						user.Qualification as  joinerQualification  ,
                         user.bankName as  joinerBankName  ,
                         user.accNo as  joinerAccNo  ,
-                        user.accName as  joinerAccName  ,
-					    FROM Joining j, ActivityType t, Joiner user, Activity a ,Country c, Currency cr ';
+                        user.accName as  joinerAccName   
+					    FROM Joining j, ActivityType t, Joiner user, Activity a  ';
     
-    // $joinStatement=" 
-    // LEFT OUTER JOIN Photo photo ON a.photoid = photo.Id 
-    // LEFT OUTER JOIN Comment comment ON a.commentid = comment.Id   
-    //  ";
-    $whereStatement = " where 1=1 and j.ActivityId=a.Id and j.joinerId=user.Id  and a.ActivityType=t.Id  and a.currencyId=cr.Id and a.countryId=c.Id  ";
+     
+    $joinStatement="
+        LEFT JOIN Country c 
+        ON a.countryId=c.Id  
+     
+        LEFT JOIN Currency cr
+        ON a.currencyId=cr.Id   
+     ";
+
+     $whereStatement = " where 1=1 and j.ActivityId=a.Id and j.joinerId=user.Id  and a.ActivityType=t.Id   ";
     
     $orderStatement   = "  ORDER BY a.FromPeriod ASC  ";
     $filterActivityId = getKeyVal($reqParam, "activityId");
@@ -1181,7 +1184,8 @@ function getJoiningListing($app)
         $whereStatement = $whereStatement . " and a.CreatedBy = '%" . $filterCreatedBy . "%'";
     }
     
-    $sqlStatement = $sqlStatement . $whereStatement . $orderStatement . " ; ";
+    $sqlStatement = $sqlStatement . $joinStatement . $whereStatement . 
+                    $orderStatement . " ; ";
     $data         = queryDB($sqlStatement);
     getJsonResponse($app, $data);
     

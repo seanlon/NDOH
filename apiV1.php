@@ -2,13 +2,11 @@
 
 // API group
 $app->group('/v1', function () use ($app) {
-        
-        //import api functions
-        require('apiFunctionsV1.php');
-    
-        // Get book with ID
-        $app->get('/books/:id', function ($id) {
 
+     
+      
+        // Get book with ID
+        $app->get('/books/:id', function ($id) { 
         });
  
         //GET ALL FRIENDS  
@@ -57,12 +55,15 @@ $app->group('/v1', function () use ($app) {
         //GET ALL activity  via post
         $app->post(  '/activity', function() use ($app)
         {
+
+             require_once  'apiFunctionsV1.php' ;
             getActivityListing($app);
         });
 
         //GET ALL speaker  via post
         $app->post(  '/speaker', function() use ($app)
         {
+             require_once  'apiFunctionsV1.php' ;
             getSpeakerListing($app);
         });
 
@@ -70,58 +71,68 @@ $app->group('/v1', function () use ($app) {
 //GET ALL speaking  via post
 $app->post(  '/speaking', function() use ($app)
 {
+             require_once  'apiFunctionsV1.php' ;
     getSpeakingListing($app);
 });
 
 //GET ALL    via post
 $app->post(  '/joiner', function() use ($app)
 {
+             require_once  'apiFunctionsV1.php' ;
     getJoinerListing($app);
 });
 
 //GET ALL    via post
 $app->post(  '/joining', function() use ($app)
 {
+             require_once  'apiFunctionsV1.php' ;
     getJoiningListing($app);
 });
 
 //Add new activity  via post
 $app->post(  '/event', function() use ($app)
 {
+             require_once  'apiFunctionsV1.php' ;
     addNewActivityEvent($app);
 });
 //Add new activity  via post
 $app->put(  '/event', function() use ($app)
 {
+             require_once  'apiFunctionsV1.php' ;
     editActivityEvent($app);
 });
 //del activity via delete
 $app->delete(  '/event/:activityId', function($activityId) use ($app)
 {
+             require_once  'apiFunctionsV1.php' ;
     deleteActivityEvent($app, $activityId);
 });
 
 //del photo   via delete
 $app->delete(  '/photo/:activityId', function($activityId) use ($app)
 {
+             require_once  'apiFunctionsV1.php' ;
     deletePhoto($app, $activityId);
 });
 
 //add photo  via post
 $app->post(  '/photo', function() use ($app)
 {
+             require_once  'apiFunctionsV1.php' ;
     addphoto($app);
 });
 
 //del ActivityType via delete
 $app->delete(  '/ActivityType/:id', function($id) use ($app)
 {
+             require_once  'apiFunctionsV1.php' ;
     deleteActivityType($app, $id);
 });
 
 //add ActivityType via post
 $app->post(  '/ActivityType', function() use ($app)
 {
+             require_once  'apiFunctionsV1.php' ;
     addActivityType($app);
 });
 
@@ -129,11 +140,13 @@ $app->post(  '/ActivityType', function() use ($app)
 //del User via delete
 $app->delete(  '/user/:joinerFbUsername', function($joinerFbUsername) use ($app)
 {
+             require_once  'apiFunctionsV1.php' ;
     deleteUser($app, $joinerFbUsername);
 });
 //add User via post
 $app->post(  '/user', function() use ($app)
 {
+             require_once  'apiFunctionsV1.php' ;
     addUser($app);
 });
 

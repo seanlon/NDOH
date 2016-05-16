@@ -1,8 +1,7 @@
 <?php
 
 function connectDB()
-{
-    require_once 'lib/mysql.php';
+{ 
     $db = connect_db();
     return $db;
 }
