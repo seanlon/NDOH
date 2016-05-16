@@ -6,5 +6,3 @@ $fpLog = fopen($filename, "c") or die('Cannot open file: ' . $filename);
 fseek($fpLog, -1, SEEK_END);
 $logWriter = new \Slim\LogWriter($fpLog);
 
-
-?> 
