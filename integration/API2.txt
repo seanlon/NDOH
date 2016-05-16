@@ -1,0 +1,15 @@
+ 1 Form Servce
+
+----------REQUEST--------------
+----------/header/--------------
+ Request URL: http://seanloh.com/NDOH/v1/FormService
+Request Method:POST
+Status Code:200 OK
+Remote Address:202.75.56.136:80 
+
+Content-Type:application/json; charset=UTF-8
+----------/body/--------------
+{}
+----------RESPONSE--------------
+{"country":[{"id":"2","shortName":"UAE","name":"United Emirate Arab","isBanned":"0"},{"id":"1","shortName":"MY","name":"Malaysian  ","isBanned":"0"}],"currency":[{"id":"1","name":"MYR","countryId":"1"},{"id":"2","name":"Dina","countryId":"2"}]}
+
