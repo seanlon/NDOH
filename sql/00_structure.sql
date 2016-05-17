@@ -113,7 +113,7 @@ PRIMARY KEY (  `id` )
  --13may2016- sean : add currency  
 CREATE TABLE  `Currency` (
  `Id` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT ,
- `Name` VARCHAR( 255 )  ,
+ `shortName` VARCHAR(15 )  ,`Name` VARCHAR( 255 ) , 
  `countryId` INT( 10 ),
 PRIMARY KEY (  `id` )
 ) ENGINE = MYISAM DEFAULT CHARSET = UTF8 AUTO_INCREMENT =1;
