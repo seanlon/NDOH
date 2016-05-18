@@ -862,7 +862,11 @@ function modifyUserStatus($app)
              }
              $whereStatement = " WHERE joinerId='" . $joinerId . "'  and activityId='". $activityId . "'"; 
              $mysqli = crudDB($sqlStatement . $setStatement . $whereStatement);
-              getJsonResponse($app, $mysqli);  
+            $result = array(
+                        "status" => true,
+                        "data" => $mysqli
+                    );
+              getJsonResponse($app, $result);  
           }
           else  if ( "REMOVE"== $action  ) {
 
