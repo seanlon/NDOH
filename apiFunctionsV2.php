@@ -184,7 +184,7 @@ function getActivityListing($app)
 				a.isPrivate ,
 				a.joinersLimit  ,
 				a.FromPeriod,a.price, 
-                a.currencyId, cr.name as currencyName, cr.countryId as currencyCountryId,
+                a.currencyId, cr.name as currencyName, cr.shortName as currencyShortName, cr.countryId as currencyCountryId,
                 a.countryId,c.shortName as countryShortName,c.name as countryName, c.isBanned as countryIsBanned, 
 				a.ToPeriod,
 				a.ActivityType as activityId ,  t.name as activityDesc ,   
@@ -810,7 +810,7 @@ function deleteActivityType($app, $id)
 
 function getCurrency($currencyId )
 { 
-    $sqlStatement   = 'SELECT id, name,countryId  FROM Currency';
+    $sqlStatement   = 'SELECT id,shortName, name,countryId  FROM Currency';
     $whereStatement = " where 1=1 " ;
 
     if (!empty($currencyId)) {
@@ -1073,7 +1073,7 @@ function getJoiningListing($app)
 						a.joinersLimit  ,
 						a.FromPeriod,
 						a.ToPeriod,a.price,
-                        a.currencyId, cr.name as currencyName, cr.countryId as currencyCountryId,
+                        a.currencyId, cr.name as currencyName,cr.shortName as currencyShortName, cr.countryId as currencyCountryId,
                         a.countryId,c.shortName as countryShortName,c.name as countryName, c.isBanned as countryIsBanned,
 						a.ActivityType as activityId ,  
 						t.name as activityDesc ,   
