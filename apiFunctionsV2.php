@@ -140,6 +140,8 @@ function getPhotoByActivity($activityId)
             user.bankName as BankName,
             user.accName as AccName,
             user.accNo as AccNo,
+            user.email as email,
+            user.mobile as mobile,
 		   user.Name,user.Qualification  FROM Photo photo, Joiner user ';
     $whereStatement = " where 1=1  and  photo.createdBy= user.Id ";
     
@@ -162,6 +164,8 @@ function getCommentByActivity($activityId)
             user.bankName as BankName,
             user.accName as AccName,
             user.accNo as AccNo,
+            user.email as email,
+            user.mobile as mobile,
 		   user.Name,user.Qualification   FROM Comment com, Joiner user ';
     $whereStatement = " where 1=1  and  com.createdBy= user.Id ";
     
@@ -200,6 +204,8 @@ function getActivityListing($app)
                 user.bankName as BankName,
                 user.accName as AccName,
                 user.accNo as AccNo,
+                user.email as email,
+                user.mobile as mobile,
                 user.Qualification as userCreatedQualification 
 		  
 			 FROM ActivityType t  , Joiner user, Activity a   ';
@@ -390,65 +396,121 @@ function addNewActivityEvent($app)
     $name           = getKeyVal($reqParam, "name");
     if (!empty($name)) {
         $valueStatement = $valueStatement . "'" . $name . "',";
+    } 
+    else{ 
+        $valueStatement = $valueStatement . "'-',";
     }
-    
+
     $description = getKeyVal($reqParam, "description");
     if (!empty($description)) {
         $valueStatement = $valueStatement . "'" . $description . "',";
     }
+    else{ 
+        $valueStatement = $valueStatement . "'-',";
+    }
+    
     $isPrivate = getKeyVal($reqParam, "isPrivate");
     if (!empty($isPrivate)) {
         $valueStatement = $valueStatement . "'" . $isPrivate . "',";
     }
+    else{ 
+        $valueStatement = $valueStatement . "'1',";
+    }
+    
     $joinersLimit = getKeyVal($reqParam, "joinersLimit");
     if (!empty($joinersLimit)) {
         $valueStatement = $valueStatement . "'" . $joinersLimit . "',";
     }
+    else{ 
+        $valueStatement = $valueStatement . "'10',";
+    }
+    
     
     $activityType = getKeyVal($reqParam, "activityType");
     if (!empty($activityType)) {
         $valueStatement = $valueStatement . "'" . $activityType . "',";
-    }
+    } 
+    
     $fromPeriod = getKeyVal($reqParam, "fromPeriod");
     if (!empty($fromPeriod)) {
         $valueStatement = $valueStatement . "'" . $fromPeriod . "',";
     }
+    else{  
+        $valueStatement = $valueStatement . "'" . date('Y-m-d H:i:s') . "',"; 
+    }
+    
     $toPeriod = getKeyVal($reqParam, "toPeriod");
     if (!empty($toPeriod)) {
         $valueStatement = $valueStatement . "'" . $toPeriod . "',";
+    } 
+    else{  
+        $valueStatement = $valueStatement . "'" . date('Y-m-d H:i:s') . "',"; 
     }
+    
     $address = getKeyVal($reqParam, "address");
     if (!empty($address)) {
         $valueStatement = $valueStatement . "'" . $address . "',";
     }
+    else{ 
+        $valueStatement = $valueStatement . "'-',";
+    }
+    
     $latLoc = getKeyVal($reqParam, "latLoc");
     if (!empty($latLoc)) {
         $valueStatement = $valueStatement . "'" . $latLoc . "',";
     }
+    else{ 
+        $valueStatement = $valueStatement . "'-',";
+    }
+    
     $lngLoc = getKeyVal($reqParam, "lngLoc");
     if (!empty($lngLoc)) {
         $valueStatement = $valueStatement . "'" . $lngLoc . "',";
     }
+    else{ 
+        $valueStatement = $valueStatement . "'-',";
+    }
+    
     $price = getKeyVal($reqParam, "price");
     if (!empty($price)) {
         $valueStatement = $valueStatement . "'" . $price . "',";
     }
+    else{ 
+        $valueStatement = $valueStatement . "'0',";
+    }
+    
     $currencyId = getKeyVal($reqParam, "currencyId");
     if (!empty($currencyId)) {
         $valueStatement = $valueStatement . "'" . $currencyId . "',";
     }
+    else{ 
+        $valueStatement = $valueStatement . "'1',";
+    }
+    
     $countryId = getKeyVal($reqParam, "countryId");
     if (!empty($countryId)) {
         $valueStatement = $valueStatement . "'" . $countryId . "',";
     }
+    else{ 
+        $valueStatement = $valueStatement . "'1',";
+    }
+    
     $createdDate = getKeyVal($reqParam, "createdDate");
     if (!empty($createdDate)) {
         $valueStatement = $valueStatement . "'" . $createdDate . "',";
+    } 
+    else{  
+        $valueStatement = $valueStatement . "'" . date('Y-m-d H:i:s') . "',"; 
     }
+    
     $createdBy = getKeyVal($reqParam, "createdBy");
     if (!empty($createdBy)) {
         $valueStatement = $valueStatement . "'" . $createdBy . "' ";
     }
+    else{ 
+        $valueStatement = $valueStatement . "'*' ";
+    }
+    
     
     $valueStatement = $valueStatement . " )";
     $mysqli         = crudDB($sqlStatement . $valueStatement);
@@ -465,47 +527,34 @@ function addNewActivityEvent($app)
     $activityId     = $mysqli->insert_id;
     if (!empty($activityId)) {
         $valueStatement = $valueStatement . "'" . $activityId . "',";
-    }
+    }  
     
     $createdBy = getKeyVal($reqParam, "createdBy");
     if (!empty($createdBy)) {
         $valueStatement = $valueStatement . "'" . $createdBy . "',";
     }
+    else{ 
+        $valueStatement = $valueStatement . "'*' ,";
+    }
+    
     //owner is approved
     $isApproved = getKeyVal($reqParam, "isApproved");
     if (!empty($isApproved)) {
         $valueStatement = $valueStatement . "'1', ";
     }
+    else{ 
+        $valueStatement = $valueStatement . "'0' ,  ";
+    }
+    
     $valueStatement = $valueStatement . "'0'  )";
     
     $mysqli         = crudDB($sqlStatement . $valueStatement);
     $ownerJoiningId = $mysqli->insert_id;
-    
-    //INSERT SPEAKER INTO JOINING TABLE 
-    // $sqlStatement = "INSERT INTO  Joining ( 
-    // 				`ActivityId` ,
-    // 				`JoinerId` ,
-    // 				`isSpeaker`  
-    // 					)  ";   
-    
-    // $valueStatement ="VALUES (";
-    //  $activityId =$mysqli->insert_id ;
-    // if ( !empty($activityId )) { 
-    //  	$valueStatement =$valueStatement . "'". $activityId."',";
-    // } 
-    
-    // $speakerId =getKeyVal($reqParam, "speakerId" ) ;
-    // if ( !empty($speakerId )) { 
-    // 	$valueStatement =$valueStatement . "'". $speakerId."',";
-    // }  
-    
-    // $valueStatement =$valueStatement . "'1'  )"; 
-    //  "joiningId"=>$mysqli->insert_id,
-    // $mysqli =crudDB( $sqlStatement .$valueStatement );    
+     
     $result = array(
         "ownerJoiningId" => $ownerJoiningId,
         "activityId" => $activityId,
-        "status" => true
+        "status" => (!empty($ownerJoiningId)  && !empty($ownerJoiningId))? true:false 
     );
     getJsonResponse($app, $result);
     
@@ -633,30 +682,45 @@ function addPhoto($app)
     if (!empty($url)) {
         $valueStatement = $valueStatement . "'" . $url . "',";
     }
+    else{ 
+        $valueStatement = $valueStatement . "'-',";
+    }
     
     $blob = getKeyVal($reqParam, "blob");
     if (!empty($blob)) {
         $valueStatement = $valueStatement . "'" . $blob . "',";
     }
+    else{ 
+        $valueStatement = $valueStatement . "NULL,";
+    }
+
     $createdDate = getKeyVal($reqParam, "createdDate");
     if (!empty($createdDate)) {
         $valueStatement = $valueStatement . "'" . $createdDate . "',";
     }
+    else{ 
+        $valueStatement = $valueStatement . "'-',";
+    }
+
     $createdBy = getKeyVal($reqParam, "createdBy");
     if (!empty($createdBy)) {
         $valueStatement = $valueStatement . "'" . $createdBy . "',";
     }
+    else{ 
+        $valueStatement = $valueStatement . "'*',";
+    }
+
     $activityId = getKeyVal($reqParam, "activityId");
     if (!empty($activityId)) {
         $valueStatement = $valueStatement . "'" . $activityId . "' ";
-    }
+    } 
     
     $valueStatement = $valueStatement . " )";
     $data           = crudDB($sqlStatement . $valueStatement);
     
     $result = array(
         "photoId" => $data->insert_id,
-        "status" => true,
+        "status" =>!empty($data->insert_id) ? true:false,
         "path" => $filePath
     );
     getJsonResponse($app, $result);
@@ -705,24 +769,42 @@ function addComment($app)
     $title          = getKeyVal($reqParam, "title");
     if (!empty($title)) {
         $valueStatement = $valueStatement . "'" . $title . "',";
+    } 
+    else{ 
+        $valueStatement = $valueStatement . "'-' , ";
     }
     
     $desc = getKeyVal($reqParam, "desc");
     if (!empty($desc)) {
         $valueStatement = $valueStatement . "'" . $desc . "',";
     }
+    else{ 
+        $valueStatement = $valueStatement . "'-' , ";
+    }
+
     $createdDate = getKeyVal($reqParam, "createdDate");
     if (!empty($createdDate)) {
         $valueStatement = $valueStatement . "'" . $createdDate . "',";
     }
+    else{ 
+        
+        $valueStatement = $valueStatement . "'" . date('Y-m-d H:i:s') . "',";
+
+    }
+    
     $createdBy = getKeyVal($reqParam, "createdBy");
     if (!empty($createdBy)) {
         $valueStatement = $valueStatement . "'" . $createdBy . "',";
     }
+    else{ 
+        $valueStatement = $valueStatement . "'*' , ";
+    }
+    
     $activityId = getKeyVal($reqParam, "activityId");
     if (!empty($activityId)) {
         $valueStatement = $valueStatement . "'" . $activityId . "' ";
     }
+     
     
     
     $valueStatement = $valueStatement . " )";
@@ -731,7 +813,7 @@ function addComment($app)
     
     $result = array(
         "commentId" => $data->insert_id,
-        "status" => true
+        "status" =>!empty($data->insert_id) ? true:false 
     );
     getJsonResponse($app, $result);
     
@@ -773,14 +855,17 @@ function addActivityType($app)
     if (!empty($name)) {
         $valueStatement = $valueStatement . "'" . $name . "' ";
     }
+    else{ 
+        $valueStatement = $valueStatement . "'-' ";
+    }
     
     $valueStatement = $valueStatement . " )";
     $data           = crudDB($sqlStatement . $valueStatement);
     
     
     $result = array(
-        "activityTypeId" => $data->insert_id,
-        "status" => true
+        "activityTypeId" => $data->insert_id, 
+        "status" =>!empty($data->insert_id) ? true:false 
     );
     getJsonResponse($app, $result);
     
@@ -896,6 +981,8 @@ function addUser($app)
                         `bankName`  ,  
                         `accNo`  , 
                         `accName`    ,
+                         `email`    ,
+                        `mobile`    ,
                         `qualification`   
  						 from Joiner  where joinerFbUsername='" . $joinerFbUsername . "'";
     $data  = queryDB($sqlStatement);
@@ -907,6 +994,8 @@ function addUser($app)
                         `bankName`  ,  
                         `accNo`  , 
                         `accName`   ,
+                         `email`    ,
+                        `mobile`    ,
 						`qualification`   
  						)  ";
         
@@ -915,42 +1004,89 @@ function addUser($app)
         if (!empty($joinerFbUsername)) {
             $valueStatement = $valueStatement . "'" . $joinerFbUsername . "',";
         }
+        else{
+           $valueStatement = $valueStatement . "'-',"; 
+        }
         
+
         $joinerImageUrl = getKeyVal($reqParam, "joinerImageUrl");
         if (!empty($joinerImageUrl)) {
             $valueStatement = $valueStatement . "'" . $joinerImageUrl . "',";
         }
+        else{
+           $valueStatement = $valueStatement . "'-',"; 
+        }
+
+
         $name = getKeyVal($reqParam, "name");
         if (!empty($name)) {
             $valueStatement = $valueStatement . "'" . $name . "' ,";
         }
+        else{
+           $valueStatement = $valueStatement . "'-',"; 
+        }
+
+
         $bankName = getKeyVal($reqParam, "bankName");
         if (!empty($bankName)) {
             $valueStatement = $valueStatement . "'" . $bankName . "' ,";
+        } 
+        else{
+           $valueStatement = $valueStatement . "'-',"; 
         }
+
+
         $accNo = getKeyVal($reqParam, "accNo");
         if (!empty($accNo)) {
             $valueStatement = $valueStatement . "'" . $accNo . "' ,";
+        } 
+        else{
+           $valueStatement = $valueStatement . "'-',"; 
         }
+
         $accName = getKeyVal($reqParam, "accName");
         if (!empty($accName)) {
             $valueStatement = $valueStatement . "'" . $accName . "' ,";
         }
+        else{
+           $valueStatement = $valueStatement . "'-',"; 
+        }
+
+        $email = getKeyVal($reqParam, "email");
+        if (!empty($email)) {
+            $valueStatement = $valueStatement . "'" . $email . "' ,";
+        }
+        else{
+           $valueStatement = $valueStatement . "'-',"; 
+        }
+
+        $mobile = getKeyVal($reqParam, "mobile");
+        if (!empty($mobile)) {
+            $valueStatement = $valueStatement . "'" . $mobile . "' ,";
+        }
+        else{
+           $valueStatement = $valueStatement . "'-',"; 
+        }
+
         $qualification = getKeyVal($reqParam, "qualification");
         if (!empty($qualification)) {
             $valueStatement = $valueStatement . "'" . $qualification . "' ";
+        }
+        else{
+           $valueStatement = $valueStatement . "'-' ";
         }
         
         $valueStatement = $valueStatement . " )";
         $mysqli         = crudDB($sqlStatement . $valueStatement);
         
         $result = array(
-            "userId" => $mysqli->insert_id,
-            "status" => true
+            "userId" => $mysqli->insert_id, 
+            "status" =>!empty($mysqli->insert_id) ? true:false 
         );
         getJsonResponse($app, $result);
     } else {
-        $data[0]['status'] = true;
+        $data[0]['status'] = false;
+        $data[0]['message'] = "already exist";
         getJsonResponse($app, $data[0]);
     }
     
@@ -1009,29 +1145,37 @@ function addEventParticipation($app)
     $activityId     = getKeyVal($reqParam, "activityId");
     if (!empty($activityId)) {
         $valueStatement = $valueStatement . "'" . $activityId . "',";
-    }
-    
+    } 
+
     $joinerId = getKeyVal($reqParam, "joinerId");
     if (!empty($joinerId)) {
         $valueStatement = $valueStatement . "'" . $joinerId . "',";
-    }
+    } 
     
     $isApproved = getKeyVal($reqParam, "isApproved");
     if (!empty($isApproved)) {
         $valueStatement = $valueStatement . "'" . $isApproved . "',";
     }
+    else{ 
+        $valueStatement = $valueStatement . "'0',";
+    }
+    
 
     $isSpeaker = getKeyVal($reqParam, "isSpeaker");
     if (!empty($isSpeaker)) {
         $valueStatement = $valueStatement . "'" . $isSpeaker . "' ";
     }
+    else{ 
+        $valueStatement = $valueStatement . "'0' ";
+    }
+    
     
     $valueStatement = $valueStatement . " )";
     $data           = crudDB($sqlStatement . $valueStatement);
     
     $result = array(
-        "joiningId" => $data->insert_id,
-        "status" => true
+        "joiningId" => $data->insert_id, 
+        "status" =>!empty($data->insert_id) ? true:false 
     );
     getJsonResponse($app, $result);
     
@@ -1093,7 +1237,9 @@ function getJoiningListing($app)
 						user.Qualification as  joinerQualification  ,
                         user.bankName as  joinerBankName  ,
                         user.accNo as  joinerAccNo  ,
-                        user.accName as  joinerAccName   
+                        user.accName as  joinerAccName,
+                        user.email as joinerEmail,
+                        user.mobile as joinerMobile
 					    FROM Joining j, ActivityType t, Joiner user, Activity a  ';
     
      
@@ -1203,6 +1349,8 @@ function getJoinerListing($app)
                         bankName as BankName,
                         accName as AccName,
                         accNo as AccNo,
+                        email as email,
+                        mobile as mobile,
 						JoinerImageUrl 
 						  FROM Joiner ';
     $whereStatement = " where 1=1 ";
@@ -1219,6 +1367,14 @@ function getJoinerListing($app)
         $whereStatement = $whereStatement . " and bankName like '%" . $filterbankName . "%'";
     }
     
+    $filteremail = getKeyVal($reqParam, "email");
+    if (!empty($filteremail)) {
+        $whereStatement = $whereStatement . " and email like '%" . $filteremail . "%'";
+    }
+    $filtermobile = getKeyVal($reqParam, "mobile");
+    if (!empty($filtermobile)) {
+        $whereStatement = $whereStatement . " and mobile like '%" . $filtermobile . "%'";
+    }
     
     $filteraccNo = getKeyVal($reqParam, "accNo");
     if (!empty($filteraccNo)) {

@@ -134,4 +134,6 @@ ADD isApproved TINYINT( 1 );
 ALTER TABLE Joiner
 ADD  `bankName` VARCHAR( 255 )   ,
 ADD  `accName` VARCHAR( 255 )   ,
+ADD  `email` VARCHAR( 255 )   ,
+ADD  `mobile` VARCHAR( 255 )   ,
 ADD  `accNo` VARCHAR( 100 )    ;
