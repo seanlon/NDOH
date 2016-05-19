@@ -112,11 +112,17 @@ $app->delete(  '/user/:joinerFbUsername', function($joinerFbUsername) use ($app)
 //add User via post
 $app->post(  '/user', function() use ($app)
 {
-            //import api functions
-            require_once 'apiFunctionsV2.php' ;
+    //import api functions
+    require_once 'apiFunctionsV2.php' ;
     addUser($app);
 });
-
+//edit user 
+$app->put(  '/user', function() use ($app)
+{
+    //import api functions
+    require_once 'apiFunctionsV2.php' ;
+    editUser($app);
+});
 //modify User approval via  put
 $app->put(  '/UserApproval', function() use ($app)
 {

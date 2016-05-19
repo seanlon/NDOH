@@ -561,6 +561,61 @@ function addNewActivityEvent($app)
     
 }
 
+function editUser($app)
+{
+    
+    $reqParam = getJsonRequest($app);
+    
+    $userId     = getKeyVal($reqParam, "userId");
+    $sqlStatement   = " Update  Joiner  ";
+    $setStatement   = " SET ";
+    $whereStatement = " WHERE Id='" . $userId . "' ;"; 
+
+    $joinerFbUsername           = getKeyVal($reqParam, "joinerFbUsername");
+    if (!empty($joinerFbUsername)) {
+        $setStatement = $setStatement . " joinerFbUsername='" . $joinerFbUsername . "' ,";
+    }
+    $joinerImageUrl = getKeyVal($reqParam, "joinerImageUrl");
+    if (!empty($joinerImageUrl)) {
+        $setStatement = $setStatement . " joinerImageUrl='" . $joinerImageUrl . "' ,";
+    }
+    $name = getKeyVal($reqParam, "name");
+    if (!empty($name)) {
+        $setStatement = $setStatement . " name='" . $name . "' ,";
+    }
+    $bankName = getKeyVal($reqParam, "bankName");
+    if (!empty($bankName)) {
+        $setStatement = $setStatement . " bankName='" . $bankName . "' ,";
+    }
+    $accNo = getKeyVal($reqParam, "accNo");
+    if (!empty($accNo)) {
+        $setStatement = $setStatement . " accNo='" . $accNo . "' ,";
+    }
+    $accName = getKeyVal($reqParam, "accName");
+    if (!empty($accName)) {
+        $setStatement = $setStatement . " accName='" . $accName . "' ,";
+    }
+    $email = getKeyVal($reqParam, "email");
+    if (!empty($email)) {
+        $setStatement = $setStatement . " email='" . $email . "' ,";
+    }
+    $mobile = getKeyVal($reqParam, "mobile");
+    if (!empty($mobile)) {
+        $setStatement = $setStatement . " mobile='" . $mobile . "' ,";
+    }
+    $qualification = getKeyVal($reqParam, "qualification");
+    if (!empty($qualification)) {
+        $setStatement = $setStatement . " qualification='" . $qualification . "' ,";
+    } 
+    $setStatement = $setStatement . " qualification=qualification ";
+    $mysqli       = crudDB($sqlStatement . $setStatement . $whereStatement);
+    
+      $result = array( 
+        "status" => true
+    );
+    getJsonResponse($app, $result);
+    
+}
 function editActivityEvent($app)
 {
     
@@ -1078,14 +1133,14 @@ function addUser($app)
         
         $valueStatement = $valueStatement . " )";
         $mysqli         = crudDB($sqlStatement . $valueStatement);
-        
-        $result = array(
-            "userId" => $mysqli->insert_id, 
-            "status" =>!empty($mysqli->insert_id) ? true:false 
-        );
-        getJsonResponse($app, $result);
+        $userId=$mysqli->insert_id;
+        $data[0]['status']=!empty($mysqli->insert_id) ? true:false ;
+        $data[0]['status'] = true;
+        $data[0]['userId']= $userId; 
+        getJsonResponse($app, $data[0]);
     } else {
         $data[0]['status'] = false;
+        $data[0]['status'] = true;
         $data[0]['message'] = "already exist";
         getJsonResponse($app, $data[0]);
     }
