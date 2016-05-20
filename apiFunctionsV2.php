@@ -279,12 +279,14 @@ function getActivityListing($app)
     if (!empty($filtercountryId)&&  empty($filterCountryList)) {
         $whereStatement = $whereStatement . " and a.countryId = '" . $filtercountryId . "'";
     }
-    else{  
+     if (empty($filtercountryId)&&  !empty($filterCountryList)) { 
+ 
        $whereStatement = $whereStatement . " and (  a.countryId  <> null  "  ;
         foreach ($filterCountryList as $value) {
              $whereStatement = $whereStatement . " or  a.countryId = '" . $value . "'";
         }
            $whereStatement = $whereStatement . " )"  ;
+       
     }
 
     $filterCreatedDate = getKeyVal($reqParam, "createdDate");
@@ -1391,7 +1393,8 @@ function getJoiningListing($app)
     if (!empty($filtercountryId)&&  empty($filterCountryList)) {
         $whereStatement = $whereStatement . " and a.countryId = '" . $filtercountryId . "'";
     }
-    else{  
+    
+     if (empty($filtercountryId)&&  !empty($filterCountryList)) {  
        $whereStatement = $whereStatement . " and (  a.countryId  <> null  "  ;
         foreach ($filterCountryList as $value) {
              $whereStatement = $whereStatement . " or  a.countryId = '" . $value . "'";
