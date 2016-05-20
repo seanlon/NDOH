@@ -610,10 +610,10 @@ function editUser($app)
     $setStatement = $setStatement . " qualification=qualification ";
     $mysqli       = crudDB($sqlStatement . $setStatement . $whereStatement);
     
-      $result = array( 
-        "status" => true
-    );
-    getJsonResponse($app, $result);
+    $data  =getUser($joinerFbUsername ) ;
+      
+      $data[0]["status"]=true;
+    getJsonResponse($app, $data[0]);
     
 }
 function editActivityEvent($app)
@@ -1023,24 +1023,27 @@ function modifyUserStatus($app)
     
 }
 
-function addUser($app)
-{
-    $reqParam         = getJsonRequest($app);
-    $joinerFbUsername = getKeyVal($reqParam, "joinerFbUsername");
+function getUser($joinerFbUsername){ 
     
     $sqlStatement = "Select 
-						`id` as userId ,  
-						`joinerFbUsername` ,
-						`joinerImageUrl` ,
-						`name`  ,
+                        `id` as userId ,  
+                        `joinerFbUsername` ,
+                        `joinerImageUrl` ,
+                        `name`  ,
                         `bankName`  ,  
                         `accNo`  , 
                         `accName`    ,
                          `email`    ,
                         `mobile`    ,
                         `qualification`   
- 						 from Joiner  where joinerFbUsername='" . $joinerFbUsername . "'";
-    $data  = queryDB($sqlStatement);
+                         from Joiner  where joinerFbUsername='" . $joinerFbUsername . "'";
+     return  queryDB($sqlStatement);
+}
+function addUser($app)
+{
+    $reqParam         = getJsonRequest($app); 
+     
+    $data  =getUser(getKeyVal($reqParam, "joinerFbUsername") ) ;
     if (empty($data)) {
         $sqlStatement = "INSERT INTO  Joiner ( 
 						`joinerFbUsername` ,
