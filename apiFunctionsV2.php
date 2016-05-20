@@ -275,10 +275,18 @@ function getActivityListing($app)
     }
     
      $filtercountryId = getKeyVal($reqParam, "countryId");
-    if (!empty($filtercountryId)) {
+     $filterCountryList= getKeyVal($reqParam, "countryList");
+    if (!empty($filtercountryId)&&  empty($filterCountryList)) {
         $whereStatement = $whereStatement . " and a.countryId = '" . $filtercountryId . "'";
     }
-    
+    else{  
+       $whereStatement = $whereStatement . " and (  a.countryId  <> null  "  ;
+        foreach ($filterCountryList as $value) {
+             $whereStatement = $whereStatement . " or  a.countryId = '" . $value . "'";
+        }
+           $whereStatement = $whereStatement . " )"  ;
+    }
+
     $filterCreatedDate = getKeyVal($reqParam, "createdDate");
     if (!empty($filterCreatedDate)) {
         $whereStatement = $whereStatement . " and a.CreatedDate   ='" . $filterCreatedDate . "'";
@@ -1376,12 +1384,21 @@ function getJoiningListing($app)
     if (!empty($filtercurrencyId)) {
         $whereStatement = $whereStatement . " and a.currencyId like '%" . $filtercurrencyId . "%'";
     }
+     
     
-    $filtercountryId = getKeyVal($reqParam, "countryId");
-    if (!empty($filtercountryId)) {
-        $whereStatement = $whereStatement . " and a.countryId like '%" . $filtercountryId . "%'";
+     $filtercountryId = getKeyVal($reqParam, "countryId");
+     $filterCountryList= getKeyVal($reqParam, "countryList");
+    if (!empty($filtercountryId)&&  empty($filterCountryList)) {
+        $whereStatement = $whereStatement . " and a.countryId = '" . $filtercountryId . "'";
     }
-    
+    else{  
+       $whereStatement = $whereStatement . " and (  a.countryId  <> null  "  ;
+        foreach ($filterCountryList as $value) {
+             $whereStatement = $whereStatement . " or  a.countryId = '" . $value . "'";
+        }
+           $whereStatement = $whereStatement . " )"  ;
+    }
+
     
     $filterCreatedDate = getKeyVal($reqParam, "createdDate");
     if (!empty($filterCreatedDate)) {
